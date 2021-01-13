@@ -91,8 +91,7 @@
             new THREE.Vector3(1, 0, 0).cross(plane.normal).normalize(),
             plane.constant * -1
           );
-          return obj;
-        };
+         };
 
         function cutMesh(mesh_1, mesh_2, material){
         	var csg_1 = new ThreeBSP(mesh_1);
@@ -111,19 +110,23 @@
         // first geometry to cut
         const geometry = new THREE.SphereGeometry( 5, 32, 32 );
 		const object_1 = new THREE.Mesh( geometry );
-		// scene.add( object_1 );
-		console.log(object_1);
 
 		// define cutter
 		const geometry_2 = new THREE.BoxGeometry(5, 10, 10);
 		const object_2 = new THREE.Mesh(geometry_2);
 
-		var csg_1 = new ThreeBSP(object_1);
-		var csg_2 = new ThreeBSP(object_2);
 		var material = new THREE.MeshLambertMaterial({color: 0xaaaaaa});
 
 		const object_3 = cutMesh(object_2, object_1, material);
-		scene.add(object_3);
+		// scene.add(object_3);
+
+		var loader = new THREE.STLLoader();
+        loader.load("assets/ball.stl", function (ball) {
+        	loader.load("assets/box.stl", function (box) {
+                const obj_final = cutMesh(box, ball, material);
+                scene.add(obj_final);
+        	});
+        });
 
         render();
 
